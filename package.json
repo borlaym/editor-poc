@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.1.8",
+    "@storybook/addon-centered": "^3.1.2",
     "@storybook/addon-comments": "^3.1.6",
     "@storybook/addon-knobs": "^3.1.8",
     "@storybook/addon-links": "^3.1.6",

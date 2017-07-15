@@ -1,13 +1,16 @@
 import React from 'react';
 
-import { storiesOf } from '@storybook/react';
-import { withKnobs, text, select } from '@storybook/addon-knobs';
+import { storiesOf, withCentered } from '@storybook/react';
+import { withKnobs, text, select, boolean } from '@storybook/addon-knobs';
+import { action } from '@storybook/addon-actions';
+import centered from '@storybook/addon-centered';
 
 import Image from './';
 
 const stories = storiesOf('Block Nodes', module);
 
 stories.addDecorator(withKnobs);
+stories.addDecorator(centered);
 
 stories.add('Image', () => 
     <Image
@@ -16,5 +19,7 @@ stories.add('Image', () =>
             'Left': 'Left',
             'Center': 'Center'
         }, 'Center')}
+        hasFocus={boolean('Has focus', false)}
+        onCommand={action('Command')}
     />
 )
