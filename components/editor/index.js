@@ -1,5 +1,15 @@
 // @flow
 import React, { Component } from 'react';
+import Image from '../block-nodes/image';
+
+const mapTypeToComponent = (type) => {
+    switch(type) {
+        case 'Image':
+            return Image;
+        default:
+            return null;
+    }
+}
 
 export default class Editor extends Component {
     state = {
@@ -10,6 +20,9 @@ export default class Editor extends Component {
 
     constructor(props) {
         super(props);
+        if (props.value) {
+            this.state.value = props.value;
+        }
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -20,8 +33,11 @@ export default class Editor extends Component {
     }
 
     render() {
+        const { body } = this.state.value;
         return (
-            <div>Hello world</div>
+            <div>
+                {body.map(node => React.createElement(mapTypeToComponent(node), node))}
+            </div>
         )
     }
 }

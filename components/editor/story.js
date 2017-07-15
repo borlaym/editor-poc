@@ -5,4 +5,16 @@ import { storiesOf } from '@storybook/react';
 import Editor from './';
 
 storiesOf('Editor', module)
-  .add('', () => <Editor />)
+  .add('', () => 
+    <Editor
+      value={{
+        body: [
+          {
+            type: 'Image',
+            url: 'http://cdn1-www.cattime.com/assets/uploads/gallery/persian-cats-and-kittens/persian-cats-and-kittens-1.jpg',
+            alignment: 'Center'
+          }
+        ]
+      }}
+    />
+  )
