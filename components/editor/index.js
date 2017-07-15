@@ -36,7 +36,7 @@ export default class Editor extends Component {
         const { body } = this.state.value;
         return (
             <div>
-                {body.map(node => React.createElement(mapTypeToComponent(node), node))}
+                {body.map(node => React.createElement(mapTypeToComponent(node.type), node))}
             </div>
         )
     }
