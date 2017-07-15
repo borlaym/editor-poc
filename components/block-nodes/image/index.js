@@ -3,7 +3,7 @@ import FloatingToolbar from '../../floating-toolbar';
 import './style.css';
 
 export default (props) => {
-    const { url, alignment, hasFocus, onCommand, node } = props;
+    const { url, alignment, hasFocus, onCommand, node, width, height } = props;
     const alignmentClass = alignment === 'Left' ? 'align--left' : 'align--center';
     const toolbar = (
         <FloatingToolbar>
@@ -14,7 +14,12 @@ export default (props) => {
     return (
         <figure onClick={() => onCommand(node, 'FOCUS')}>
             {hasFocus && toolbar}
-            <img src={url} className={alignmentClass} />
+            <img
+                src={url}
+                className={alignmentClass}
+                width={width || null}
+                height={height || null}
+            />
         </figure>
     );
 }

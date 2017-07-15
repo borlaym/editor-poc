@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { storiesOf, withCentered } from '@storybook/react';
-import { withKnobs, text, select, boolean } from '@storybook/addon-knobs';
+import { withKnobs, text, select, boolean, number } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import centered from '@storybook/addon-centered';
 
@@ -21,5 +21,7 @@ stories.add('Image', () =>
         }, 'Center')}
         hasFocus={boolean('Has focus', false)}
         onCommand={action('Command')}
+        width={number('Width')}
+        height={number('Height')}
     />
 )
