@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import Image from '../block-nodes/image';
+import { moveUp, moveDown } from './commands';
 
 const mapTypeToComponent = (type) => {
     switch(type) {
@@ -34,11 +35,28 @@ export default class Editor extends Component {
     }
 
     handleCommand(node, command) {
+        const { onChange } = this.props;
         switch(command) {
             case 'FOCUS':
                 this.setState({
                     focusedNode: node
                 });
+                break;
+            case 'MOVE_UP':
+                this.setState({
+                    value: {
+                        ...this.state.value,
+                        body: moveUp(this.state.value.body, node)
+                    }
+                }, () => onChange(this.state.value));
+                break;
+            case 'MOVE_DOWN':
+                this.setState({
+                    value: {
+                        ...this.state.value,
+                        body: moveDown(this.state.value.body, node)
+                    }
+                }, () => onChange(this.state.value));
                 break;
         }
     }
