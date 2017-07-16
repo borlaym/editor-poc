@@ -24,14 +24,23 @@ export default class Editor extends Component {
         if (props.value) {
             this.state.value = props.value;
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleBodyChange = this.handleBodyChange.bind(this);
         this.handleCommand = this.handleCommand.bind(this);
     }
 
-    handleChange(value) {
+    handleBodyChange(oldNode, newNode) {
+        const { body } = this.state.value;
         this.setState({
-            value
-        });
+            value: {
+                ...this.state.value,
+                body: [
+                    ...body.slice(0, body.indexOf(oldNode)),
+                    newNode,
+                    ...body.slice(body.indexOf(oldNode) + 1)
+                ]
+            },
+            focusedNode: newNode
+        }, () => this.props.onChange(this.state.value));
     }
 
     handleCommand(node, command) {
@@ -68,6 +77,7 @@ export default class Editor extends Component {
             <div>
                 {body.map((node, index) => React.createElement(mapTypeToComponent(node.type), {
                     onCommand: this.handleCommand,
+                    onChange: this.handleBodyChange,
                     hasFocus: node === focusedNode,
                     key: index,
                     node
