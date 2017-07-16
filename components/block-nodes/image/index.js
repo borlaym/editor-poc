@@ -7,8 +7,9 @@ export default (props) => {
         url,
         alignment,
         width,
-        height
-     }, hasFocus, onCommand, node } = props;
+        height,
+        caption
+     }, hasFocus, onCommand, onChange, node } = props;
     const alignmentClass = alignment === 'Left' ? 'align--left' : 'align--center';
     const toolbar = (
         <FloatingToolbar>
@@ -16,6 +17,17 @@ export default (props) => {
             <span onClick={() => onCommand(node, 'MOVE_DOWN')}>Move down</span>
         </FloatingToolbar>
     );
+    const captionDisplay = hasFocus ?
+        <input
+            type="text"
+            onChange={(event) => onChange(node, {
+                ...node,
+                caption: event.target.value
+            })}
+            placeholder="Caption here"
+            value={caption}
+        /> :
+        <figcaption>{caption}</figcaption>
     return (
         <figure onClick={() => onCommand(node, 'FOCUS')}>
             {hasFocus && toolbar}
@@ -25,6 +37,7 @@ export default (props) => {
                 width={width || null}
                 height={height || null}
             />
+            {captionDisplay}
         </figure>
     );
 }

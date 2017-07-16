@@ -25,5 +25,6 @@ stories.add('Image', () =>
         }}
         hasFocus={boolean('Has focus', false)}
         onCommand={action('Command')}
+        onChange={action('Change')}
     />
 )
