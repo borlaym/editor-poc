@@ -48,12 +48,12 @@ export default class Editor extends Component {
         const { body } = this.state.value;
         return (
             <div>
-                {body.map((node, index) => React.createElement(mapTypeToComponent(node.type), Object.assign(node, {
+                {body.map((node, index) => React.createElement(mapTypeToComponent(node.type), {
                     onCommand: this.handleCommand,
                     hasFocus: node === focusedNode,
                     key: index,
                     node
-                })))}
+                }))}
             </div>
         )
     }

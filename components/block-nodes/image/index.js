@@ -3,7 +3,12 @@ import FloatingToolbar from '../../floating-toolbar';
 import './style.css';
 
 export default (props) => {
-    const { url, alignment, hasFocus, onCommand, node, width, height } = props;
+    const { node: {
+        url,
+        alignment,
+        width,
+        height
+     }, hasFocus, onCommand, node } = props;
     const alignmentClass = alignment === 'Left' ? 'align--left' : 'align--center';
     const toolbar = (
         <FloatingToolbar>
