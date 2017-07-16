@@ -24,6 +24,7 @@ export default class Editor extends Component {
             this.state.value = props.value;
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleCommand = this.handleCommand.bind(this);
     }
 
     handleChange(value) {
@@ -32,11 +33,27 @@ export default class Editor extends Component {
         });
     }
 
+    handleCommand(node, command) {
+        switch(command) {
+            case 'FOCUS':
+                this.setState({
+                    focusedNode: node
+                });
+                break;
+        }
+    }
+
     render() {
+        const { focusedNode } = this.state;
         const { body } = this.state.value;
         return (
             <div>
-                {body.map(node => React.createElement(mapTypeToComponent(node.type), node))}
+                {body.map((node, index) => React.createElement(mapTypeToComponent(node.type), Object.assign(node, {
+                    onCommand: this.handleCommand,
+                    hasFocus: node === focusedNode,
+                    key: index,
+                    node
+                })))}
             </div>
         )
     }
