@@ -12,9 +12,40 @@ const stories = storiesOf('Content Editable', module);
 stories.addDecorator(withKnobs);
 stories.addDecorator(centered);
 
+class ControlledComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: props.value
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(value) {
+        this.setState({
+            value
+        });
+        this.props.onChange(value);
+    }
+
+    render() {
+        return (
+            <div>
+                {React.Children.map(this.props.children, child => {
+                    return React.cloneElement(child, {
+                        node: this.state.value,
+                        onChange: this.handleChange
+                    })
+                })}
+            </div>
+        )
+    }
+}
+
 stories.add('', () => 
-    <ContentEditable
-        node={{
+    <ControlledComponent
+        value={{
             type: 'Paragraph',
             value: [{
                 type: "Text",
@@ -31,5 +62,7 @@ stories.add('', () =>
             }]
         }}
         onChange={action('Change')}
-    />
+    >
+        <ContentEditable/>
+    </ControlledComponent>
 )

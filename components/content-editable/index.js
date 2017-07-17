@@ -17,7 +17,13 @@ class ContentEditable extends Component {
 		const index = parentElement.dataset.index;
 		const selection = window.getSelection();
 		this.setState({
-			selection
+			selection: {
+				// Funny things here, the reference changes if I just store that
+				// And if I spread / Object.assign it, it returns an empty object
+				anchorNode: selection.anchorNode,
+				anchorOffset: selection.anchorOffset,
+				index
+			}
 		});
         this.props.onChange({
             ...this.props.node,
@@ -44,7 +50,7 @@ class ContentEditable extends Component {
 		}
 		const range = document.createRange();
 		const selection = window.getSelection();
-		range.setStart(this.element.childNodes[0], this.state.selection);
+		range.setStart(this.element.childNodes[this.state.selection.index].childNodes[0], this.state.selection.anchorOffset);
 		range.collapse(true);
 		selection.removeAllRanges();
 		selection.addRange(range);
