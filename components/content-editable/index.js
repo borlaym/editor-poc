@@ -13,13 +13,21 @@ class ContentEditable extends Component {
     }
 
 	handleChange(event) {
+		const parentElement = window.getSelection().anchorNode.parentElement;
+		const index = parentElement.dataset.index;
+		const selection = window.getSelection();
 		this.setState({
-			selection: window.getSelection().anchorOffset
+			selection
 		});
         this.props.onChange({
             ...this.props.node,
             value: [
-                ...this.props.node.value
+                ...this.props.node.value.slice(0, index),
+				{
+					...this.props.node.value[index],
+					value: parentElement.textContent
+				},
+				...this.props.node.value.slice(index + 1)
             ]
         });
 	}

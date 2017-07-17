@@ -12,23 +12,22 @@ const stories = storiesOf('Content Editable', module);
 stories.addDecorator(withKnobs);
 stories.addDecorator(centered);
 
-stories.add('Image', () => 
+stories.add('', () => 
     <ContentEditable
         node={{
             type: 'Paragraph',
             value: [{
                 type: "Text",
                 styles: [],
-                value: "Some text. "
+                value: "Lorem ipsum  "
             }, {
-                type: "Link",
-                reference: "https://google.com",
-                target: "_blank",
-                value: [{
-                    type: "Text",
-                    styles: [],
-                    value: "This is a link"
-                }]
+                type: "Text",
+                styles: ['Bold'],
+                value: "dolor sit"
+            }, {
+                type: "Text",
+                styles: ['Italic', 'Bold'],
+                value: " amet."
             }]
         }}
         onChange={action('Change')}
