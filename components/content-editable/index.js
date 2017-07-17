@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import renderInlineNodes from './renderInlineNodes';
 import typeToElement from './typeToElement';
-
+import getParentInlineElement from './helpers/getParentInlineElement';
+import getTextNode from './helpers/getTextNode';
 class ContentEditable extends Component {
 	state = {
 		selection: null
@@ -13,8 +14,8 @@ class ContentEditable extends Component {
     }
 
 	handleChange(event) {
-		const parentElement = window.getSelection().anchorNode.parentElement;
-		const index = parentElement.dataset.index;
+		const parentElement = getParentInlineElement(window.getSelection().anchorNode);
+		const index = Number(parentElement.dataset.route);
 		const selection = window.getSelection();
 		this.setState({
 			selection: {
@@ -50,7 +51,7 @@ class ContentEditable extends Component {
 		}
 		const range = document.createRange();
 		const selection = window.getSelection();
-		range.setStart(this.element.childNodes[this.state.selection.index].childNodes[0], this.state.selection.anchorOffset);
+		range.setStart(getTextNode(this.element.childNodes[this.state.selection.index]), this.state.selection.anchorOffset);
 		range.collapse(true);
 		selection.removeAllRanges();
 		selection.addRange(range);
