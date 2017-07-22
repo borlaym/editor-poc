@@ -1,8 +1,18 @@
+// @flow
+
 import React from 'react';
 import FloatingToolbar from '../../floating-toolbar';
+import { MOVE_UP, MOVE_DOWN, FOCUS } from '../../commands';
+import type {
+    Image,
+    BlockNode,
+    CommandHandler,
+    ChangeHandler,
+    EditorBlockNodeProps
+} from '../types';
 import './style.css';
 
-export default (props) => {
+export default (props: EditorBlockNodeProps<Image>) => {
     const { node: {
         url,
         alignment,
@@ -13,8 +23,8 @@ export default (props) => {
     const alignmentClass = alignment === 'Left' ? 'align--left' : 'align--center';
     const toolbar = (
         <FloatingToolbar>
-            <span onClick={() => onCommand(node, 'MOVE_UP')}>Move up</span>
-            <span onClick={() => onCommand(node, 'MOVE_DOWN')}>Move down</span>
+            <span onClick={() => onCommand(node, MOVE_UP)}>Move up</span>
+            <span onClick={() => onCommand(node, MOVE_DOWN)}>Move down</span>
         </FloatingToolbar>
     );
     const captionDisplay = hasFocus ?
@@ -29,7 +39,7 @@ export default (props) => {
         /> :
         <figcaption>{caption}</figcaption>
     return (
-        <figure onClick={() => onCommand(node, 'FOCUS')}>
+        <figure onClick={() => onCommand(node, FOCUS)}>
             {hasFocus && toolbar}
             <img
                 src={url}
