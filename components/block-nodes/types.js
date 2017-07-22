@@ -3,6 +3,7 @@
 import * as Commands from '../commands';
 
 export type Image = {
+    type: string,
     id: number,
     format: 'jpg' | 'png' | 'gif' | 'png' | 'svg',
     width?: number,

@@ -1,25 +1,48 @@
 // @flow
-import React, { Component } from 'react';
+import React from 'react';
+import type { Component } from 'react-flow-types';
 import Image from '../block-nodes/image';
 import { moveUp, moveDown } from './commands';
+import type {
+    BlockNode,
+    ChangeHandler,
+    CommandHandler,
+    Command,
+    EditorBlockNodeProps
+} from '../block-nodes/types';
+import type { Post } from '../types';
 
-const mapTypeToComponent = (type) => {
+
+const mapTypeToComponent = (type: string): Component<EditorBlockNodeProps<BlockNode>>  => {
     switch(type) {
         case 'Image':
             return Image;
         default:
-            return null;
+            return Image;
     }
 }
 
-export default class Editor extends Component {
-    state = {
+type Props = {
+    value: Post,
+    onChange: Post => void
+};
+
+type State = {
+    value: Post,
+    focusedNode: ?BlockNode
+};
+
+export default class Editor extends React.Component<*, Props, State> {
+    state: State = {
         value: {
             body: []
-        }
+        },
+        focusedNode: null
     };
+    handleBodyChange: ChangeHandler;
+    handleCommand: CommandHandler;
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         if (props.value) {
             this.state.value = props.value;
@@ -28,7 +51,7 @@ export default class Editor extends Component {
         this.handleCommand = this.handleCommand.bind(this);
     }
 
-    handleBodyChange(oldNode, newNode) {
+    handleBodyChange(oldNode: BlockNode, newNode: BlockNode): void {
         const { body } = this.state.value;
         this.setState({
             value: {
@@ -43,7 +66,7 @@ export default class Editor extends Component {
         }, () => this.props.onChange(this.state.value));
     }
 
-    handleCommand(node, command) {
+    handleCommand(node: BlockNode, command: Command): void {
         const { onChange } = this.props;
         switch(command) {
             case 'FOCUS':
@@ -75,7 +98,7 @@ export default class Editor extends Component {
         const { body } = this.state.value;
         return (
             <div>
-                {body.map((node, index) => React.createElement(mapTypeToComponent(node.type), {
+                {body.map((node: BlockNode, index) => React.createElement(mapTypeToComponent(node.type), {
                     onCommand: this.handleCommand,
                     onChange: this.handleBodyChange,
                     hasFocus: node === focusedNode,
