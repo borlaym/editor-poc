@@ -5,9 +5,6 @@ import FloatingToolbar from '../../floating-toolbar';
 import { MOVE_UP, MOVE_DOWN, FOCUS } from '../../commands';
 import type {
     Image,
-    BlockNode,
-    CommandHandler,
-    ChangeHandler,
     EditorBlockNodeProps
 } from '../types';
 import './style.css';
@@ -16,6 +13,7 @@ export default (props: EditorBlockNodeProps<Image>) => {
     const { node: {
         url,
         alignment,
+        altText,
         width,
         height,
         caption
@@ -46,6 +44,7 @@ export default (props: EditorBlockNodeProps<Image>) => {
                 className={alignmentClass}
                 width={width || null}
                 height={height || null}
+                alt={altText || ''}
             />
             {captionDisplay}
         </figure>

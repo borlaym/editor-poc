@@ -2,6 +2,7 @@
 import React from 'react';
 import type { Component } from 'react-flow-types';
 import Image from '../block-nodes/image';
+import ContentEditable from '../content-editable';
 import { moveUp, moveDown } from './commands';
 import type {
     BlockNode,
@@ -12,11 +13,12 @@ import type {
 } from '../block-nodes/types';
 import type { Post } from '../types';
 
-
-const mapTypeToComponent = (type: string): Component<EditorBlockNodeProps<BlockNode>>  => {
+const mapTypeToComponent = (type: string): Component<EditorBlockNodeProps<any>>  => {
     switch(type) {
         case 'Image':
             return Image;
+        case 'Paragraph':
+            return ContentEditable;
         default:
             return Image;
     }

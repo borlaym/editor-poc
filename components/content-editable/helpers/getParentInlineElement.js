@@ -1,9 +1,14 @@
-const getParentInlineElement = element => {
+// @flow
+
+const getParentInlineElement: (HTMLElement => ?HTMLElement) = element => {
     let parentElement = element.parentElement;
-    while (parentElement.nodeName !== 'SPAN' && parentElement) {
+    while (parentElement && parentElement.nodeName !== 'SPAN') {
         parentElement = parentElement.parentElement;
     }
-    return parentElement;
+    if (parentElement instanceof HTMLElement) {
+        return parentElement;
+    }
+    return null;
 };
 
 export default getParentInlineElement;

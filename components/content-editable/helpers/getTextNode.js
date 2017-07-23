@@ -1,6 +1,8 @@
-const getTextNode = node => {
+// @flow
+
+const getTextNode: (Node => ?Node) = node => {
     let pointer = node;
-    while (pointer.childNodes && pointer.childNodes.length) {
+    while (pointer && pointer.childNodes && pointer.childNodes.length) {
         pointer = pointer.firstChild;
     }
     return pointer;

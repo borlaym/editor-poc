@@ -12,9 +12,35 @@ export type Image = {
     alignment: 'Left' | 'Center' | 'Bleed' | 'Right' | 'FullWidth',
     caption?: string,
     altText?: string
-}
+};
 
-export type BlockNode = Image;
+export type InlineNodeStyle = 'Bold' | 'Italic';
+
+export type InlineTextNode = {
+    type: 'Text',
+    styles: Array<InlineNodeStyle>,
+    value: string
+};
+
+export type InlineLinkNode = {
+    type: 'Link',
+    reference: string,
+    target: string,
+    value: Array<InlineTextNode>
+};
+
+export type InlineLineBreakNode = {
+    type: 'LineBreak'
+};
+
+export type InlineNode = InlineLinkNode | InlineTextNode | InlineLineBreakNode;
+
+export type Paragraph = {
+    type: string,
+    value: Array<InlineNode>
+};
+
+export type BlockNode = Image | Paragraph;
 
 export type Command = $Keys<Commands>;
 

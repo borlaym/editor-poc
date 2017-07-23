@@ -1,20 +1,43 @@
+// @flow
+
 import React, { Component } from 'react';
 import renderInlineNodes from './renderInlineNodes';
 import typeToElement from './typeToElement';
 import getParentInlineElement from './helpers/getParentInlineElement';
 import getTextNode from './helpers/getTextNode';
-class ContentEditable extends Component {
-	state = {
+
+import type {
+	EditorBlockNodeProps,
+	Paragraph,
+	InlineTextNode
+} from '../block-nodes/types';
+
+type Selection = {
+	anchorNode: HTMLElement,
+	anchorOffset: number,
+	index: number
+};
+
+type State = {
+	selection: ?Selection
+}
+class ContentEditable extends Component<void, EditorBlockNodeProps<Paragraph>, State> {
+	state: State = {
 		selection: null
 	};
+	handleChange: Event => void;
+	element: HTMLElement;
 
-    constructor(props) {
+    constructor(props: EditorBlockNodeProps<Paragraph>) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
     }
 
-	handleChange(event) {
+	handleChange(event: Event) {
 		const parentElement = getParentInlineElement(window.getSelection().anchorNode);
+		if (!parentElement) {
+			return;
+		}
 		const index = Number(parentElement.dataset.route);
 		const selection = window.getSelection();
 		this.setState({
@@ -26,20 +49,25 @@ class ContentEditable extends Component {
 				index
 			}
 		});
-        this.props.onChange({
+		const inlineNode = this.props.node.value[index];
+		if (inlineNode.type !== 'Text') {
+			return;
+		}
+		const newInlineNode: InlineTextNode = {
+			...inlineNode,
+			value: parentElement.textContent
+		};
+        this.props.onChange(this.props.node, {
             ...this.props.node,
             value: [
                 ...this.props.node.value.slice(0, index),
-				{
-					...this.props.node.value[index],
-					value: parentElement.textContent
-				},
+				newInlineNode,
 				...this.props.node.value.slice(index + 1)
             ]
         });
 	}
 
-	handleKeyDown(event) {
+	handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			// event.preventDefault();
 		}
@@ -49,9 +77,18 @@ class ContentEditable extends Component {
 		if (!this.state.selection) {
 			return;
 		}
+		const { index, anchorOffset } = this.state.selection;
 		const range = document.createRange();
 		const selection = window.getSelection();
-		range.setStart(getTextNode(this.element.childNodes[this.state.selection.index]), this.state.selection.anchorOffset);
+		const inlineNode = this.element.childNodes[index];
+		if (!inlineNode) {
+			return;
+		}
+		const textNode = getTextNode(inlineNode);
+		if (!textNode) {
+			return;
+		}
+		range.setStart(textNode, anchorOffset);
 		range.collapse(true);
 		selection.removeAllRanges();
 		selection.addRange(range);
