@@ -14,6 +14,9 @@ const styleToElement: (InlineNodeStyle => string) = style => {
     }
 };
 
+/**
+ * Render different inline nodes.
+ */
 const renderInlineNodes = (nodes: Array<InlineNode>) => {
     return nodes.map((node, index) => {
         if (node.type === 'LineBreak') {
@@ -26,28 +29,32 @@ const renderInlineNodes = (nodes: Array<InlineNode>) => {
                 target={target}
                 data-route={index}
                 >
-                    {node.value.map(renderInlineTextNode)}
+                    {node.value.map((innerNode, innerIndex) => {
+                        return renderInlineTextNode(innerNode, [index, 'value', innerIndex]);
+                    })}
                 </a>
         }
         if (node.type === 'Text') {
-            return renderInlineTextNode(node, index);
+            return renderInlineTextNode(node, [index]);
         }
     });
 };
 
-const renderInlineTextNode = (node: InlineTextNode, index: number) => {
+/**
+ * Render a single InlineTextNode with different stylings. It will result in a span containing style tags
+ */
+const renderInlineTextNode = (node: InlineTextNode, route: Array<string | number>) => {
     let element = node.value;
     const { styles } = node;
     styles.forEach((style, styleIndex) => {
         const wrapperElement = styleToElement(style);
         element = React.createElement(wrapperElement, {
-            key: `${index}-${styleIndex}`,
-            'data-route': `${index}-${styleIndex}`
+            key: `${route.join('.')}-${styleIndex}`
         }, element);
     });
     return React.createElement('span', {
-        key: index,
-        'data-route': index
+        key: route.join('.'),
+        'data-route': route.join('.')
     }, element);
 };
 

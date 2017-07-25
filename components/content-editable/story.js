@@ -22,11 +22,11 @@ class ControlledComponent extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(value) {
+    handleChange(oldValue, newValue) {
         this.setState({
-            value
+            value: newValue
         });
-        this.props.onChange(value);
+        this.props.onChange(newValue);
     }
 
     render() {
@@ -43,24 +43,40 @@ class ControlledComponent extends React.Component {
     }
 }
 
+const value = {
+    type: 'Paragraph',
+    value: [{
+        type: 'Link',
+        reference: 'http://apple.com',
+        target: '_blank',
+        value: [{
+            type: 'Text',
+            styles: [],
+            value: 'Link to  '
+        }, {
+            type: 'Text',
+            styles: ['Bold'],
+            value: 'Apple.'
+        }]
+    },
+    {
+        type: 'Text',
+        styles: [],
+        value: ' Lorem ipsum  '
+    }, {
+        type: 'Text',
+        styles: ['Bold'],
+        value: 'dolor sit'
+    }, {
+        type: 'Text',
+        styles: ['Italic', 'Bold'],
+        value: ' amet.'
+    }]
+};
+
 stories.add('', () => 
     <ControlledComponent
-        value={{
-            type: 'Paragraph',
-            value: [{
-                type: "Text",
-                styles: [],
-                value: "Lorem ipsum  "
-            }, {
-                type: "Text",
-                styles: ['Bold'],
-                value: "dolor sit"
-            }, {
-                type: "Text",
-                styles: ['Italic', 'Bold'],
-                value: " amet."
-            }]
-        }}
+        value={value}
         onChange={action('Change')}
     >
         <ContentEditable/>

@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
+import { List, fromJS } from 'immutable';
 import renderInlineNodes from './renderInlineNodes';
 import typeToElement from './typeToElement';
 import getParentInlineElement from './helpers/getParentInlineElement';
@@ -38,7 +39,7 @@ class ContentEditable extends Component<void, EditorBlockNodeProps<Paragraph>, S
 		if (!parentElement) {
 			return;
 		}
-		const index = Number(parentElement.dataset.route);
+		const route = parentElement.dataset.route.split('.');
 		const selection = window.getSelection();
 		this.setState({
 			selection: {
@@ -46,25 +47,16 @@ class ContentEditable extends Component<void, EditorBlockNodeProps<Paragraph>, S
 				// And if I spread / Object.assign it, it returns an empty object
 				anchorNode: selection.anchorNode,
 				anchorOffset: selection.anchorOffset,
-				index
+				index: Number(route[0])
 			}
 		});
-		const inlineNode = this.props.node.value[index];
-		if (inlineNode.type !== 'Text') {
-			return;
-		}
-		const newInlineNode: InlineTextNode = {
-			...inlineNode,
-			value: parentElement.textContent
-		};
-        this.props.onChange(this.props.node, {
-            ...this.props.node,
-            value: [
-                ...this.props.node.value.slice(0, index),
-				newInlineNode,
-				...this.props.node.value.slice(index + 1)
-            ]
-        });
+		
+		const node = fromJS(this.props.node).getIn(['value', ...route]);
+        this.props.onChange(this.props.node,
+			fromJS(this.props.node)
+				.setIn(['value', ...route, 'value'], parentElement.textContent)
+				.toJS()
+		);
 	}
 
 	handleKeyDown(event: KeyboardEvent) {
