@@ -1,5 +1,3 @@
-export {
-    MOVE_UP: 'MOVE_UP',
-    MOVE_DOWN: 'MOVE_DOWN'
-    FOCUES: 'FOCUS'
-};
+export const MOVE_UP = 'MOVE_UP';
+export const MOVE_DOWN = 'MOVE_DOWN';
+export const FOCUS = 'FOCUS';
